@@ -9,7 +9,6 @@ class Screen:
     def __init__(self, line_count, line_length):
         self.max_line_count = line_count
         self.max_line_length = line_length
-        print(line_count)
         self.line_buffer = [None] * line_count
   
     def write_line(self, line, text):

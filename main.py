@@ -2,6 +2,7 @@
 
 import time
 from datetime import date
+from itertools import islice
 
 from screen import Screen
 from temperature import get_temperature
@@ -16,8 +17,10 @@ while running:
 
     screen.write_line(0, (date.today().isoformat() + ' ' * padding + temperature))
 
-    screen.write_line(1, '07:30 Breakfast')
-    screen.write_line(2, '08:00 Work')
-    screen.write_line(3, '17:00 Free time') 
+    with open("agenda.txt", 'r') as input_file:
+        lines = islice(input_file, 3)
+        for index, line in enumerate(lines):
+            screen.write_line(index + 1, line)
+
     screen.flush()
     time.sleep(60 * 30)
