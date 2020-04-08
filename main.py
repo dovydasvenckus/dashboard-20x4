@@ -23,4 +23,4 @@ while running:
             screen.write_line(index + 1, line)
 
     screen.flush()
-    time.sleep(60 * 30)
+    time.sleep(60 * 10)
