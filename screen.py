@@ -2,11 +2,26 @@ from RPLCD.i2c import CharLCD
 
 class Screen:
     lcd = CharLCD('PCF8574', 0x27)
-    max_line_length = 20
+    max_line_count = None
+    max_line_length = None
+    line_buffer = []
+
+    def __init__(self, line_count, line_length):
+        self.max_line_count = line_count
+        self.max_line_length = line_length
+        print(line_count)
+        self.line_buffer = [None] * line_count
   
     def write_line(self, line, text):
-        self.lcd.cursor_pos = (line, 0)
-        self.lcd.write_string(text)
+        if line >= 0 and self.max_line_count > line:
+          self.line_buffer[line] = text
 
-    def clear(self):
-        self.lcd.clear()
+    def flush(self):
+        for index, line in enumerate(self.line_buffer):
+            self.__flush_line(index, line)
+        self.line_buffer = [None] * self.max_line_count
+
+    def __flush_line(self, index, line):
+        if line != None:
+            self.lcd.cursor_pos = (index, 0)
+            self.lcd.write_string(line)
