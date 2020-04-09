@@ -7,15 +7,18 @@ from itertools import islice
 from screen import Screen
 from temperature import get_temperature
 
+def get_date_temp_formated():
+    current_date = date.today().isoformat()
+    temperature = (get_temperature() or '--') + 'C'
+    padding = 20 - len(current_date) - len(temperature)
+    return (current_date + ' ' * padding + temperature)
+
 screen = Screen(4, 20)
 running = True
 
 seconds_passed = 0
 while running:
-    temperature = get_temperature() + 'C'
-    padding = 20 - len(date.today().isoformat()) - len(temperature)
-
-    screen.write_line(0, (date.today().isoformat() + ' ' * padding + temperature))
+    screen.write_line(0, get_date_temp_formated())
 
     with open("agenda.txt", 'r') as input_file:
         lines = islice(input_file, 3)
