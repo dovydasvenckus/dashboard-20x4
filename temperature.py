@@ -7,11 +7,18 @@ def get_temperature():
     try:
         page = requests.get(url, timeout=10)
         tree = html.fromstring(page.content)
-        temperature=int(tree.xpath('//div[@class="weather_info type_1"]//span[@class="temperature"]/text()')[0])
+        temperatureElement = tree.xpath('//div[@class="weather_info type_1"]//span[@class="temperature"]/text()')
 
-        if temperature > 0:
-            return '+' + str(temperature)
-        else:
-            return temperature
+        if not temperatureElement:
+            return None
+
+        temperature=int(temperatureElement[0])
+        return format_temperature(temperature)
     except requests.exceptions.ConnectionError:
         return None
+
+def format_temperature(temperature):
+    if temperature > 0:
+        return '+' + str(temperature)
+    else:
+        return temperature
