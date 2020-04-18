@@ -5,6 +5,7 @@ class Screen:
     max_line_count = None
     max_line_length = None
     line_buffer = []
+    flushed_lines = []
 
     def __init__(self, line_count, line_length):
         self.max_line_count = line_count
@@ -16,9 +17,13 @@ class Screen:
             self.line_buffer[line] = text
 
     def flush(self):
+        if (self.flushed_lines == self.line_buffer):
+            return
+
         self.lcd.clear()
         for index, line in enumerate(self.line_buffer):
             self.__flush_line(index, line)
+        self.flushed_lines = self.line_buffer
         self.line_buffer = [None] * self.max_line_count
 
     def __flush_line(self, index, line):
