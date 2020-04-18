@@ -13,9 +13,10 @@ class Screen:
   
     def write_line(self, line, text):
         if line >= 0 and self.max_line_count > line:
-          self.line_buffer[line] = text
+            self.line_buffer[line] = text
 
     def flush(self):
+        self.lcd.clear()
         for index, line in enumerate(self.line_buffer):
             self.__flush_line(index, line)
         self.line_buffer = [None] * self.max_line_count
