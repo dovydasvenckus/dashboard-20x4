@@ -14,7 +14,7 @@ def get_temperature():
 
         temperature=int(temperatureElement[0])
         return format_temperature(temperature)
-    except requests.exceptions.ConnectionError:
+    except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout) as e:
         return None
 
 def format_temperature(temperature):
