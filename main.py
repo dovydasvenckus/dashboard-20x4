@@ -1,10 +1,12 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import time
 from datetime import date, datetime
+from tzlocal import get_localzone
 from itertools import islice
 
-from agenda import AgendaItem, get_agenda
+from agendaItem import AgendaItem
+from gCalendar import get_agenda
 from screen import Screen
 from temperature import get_temperature
 
@@ -16,7 +18,7 @@ def get_date_temp_formated():
 
 def filter_upcoming_events(agenda_items):
     future_items = []
-    current_time = datetime.today()
+    current_time = datetime.today().astimezone(get_localzone())
     last_item = None
 
     for item in agenda_items:
@@ -30,6 +32,16 @@ def filter_upcoming_events(agenda_items):
     else:
         return [last_item] + future_items
 
+def format_agenda_item(item):
+    return '{hour}:{minute} {description}'.format(
+            hour = format_time(item.start_date.hour), minute=format_time(item.start_date.minute), description=item.description
+            )
+
+def format_time(time_unit):
+    if (time_unit < 10):
+        return '0{time_unit}'.format(time_unit=time_unit)
+    return time_unit
+
 screen = Screen(4, 20)
 running = True
 
@@ -40,7 +52,7 @@ while running:
 
     upcoming_events = future_items[:3]
     for index, item in enumerate(future_items):
-        screen.write_line(index + 1, item.description)
+        screen.write_line(index + 1, format_agenda_item(item))
 
     screen.flush()
     time.sleep(60 * 10)

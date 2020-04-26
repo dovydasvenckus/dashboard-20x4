@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 
 agenda.txt
+credentials.json
+token.pickle
