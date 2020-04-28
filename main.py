@@ -42,17 +42,24 @@ def format_time(time_unit):
         return '0{time_unit}'.format(time_unit=time_unit)
     return time_unit
 
+def render_events(screen):
+    future_events = filter_upcoming_events(get_agenda())
+    upcoming_events = future_events[:3]
+    if (not upcoming_events):
+        screen.write_line(2, '-No upcoming events-')
+        return
+
+    for index, item in enumerate(upcoming_events):
+        screen.write_line(index + 1, format_agenda_item(item))
+
 screen = Screen(4, 20)
 running = True
 
 seconds_passed = 0
 while running:
-    future_items = filter_upcoming_events(get_agenda())
     screen.write_line(0, get_date_temp_formated())
 
-    upcoming_events = future_items[:3]
-    for index, item in enumerate(future_items):
-        screen.write_line(index + 1, format_agenda_item(item))
+    render_events(screen)
 
     screen.flush()
     time.sleep(60 * 10)
