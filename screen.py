@@ -29,4 +29,4 @@ class Screen:
     def __flush_line(self, index, line):
         if line != None:
             self.lcd.cursor_pos = (index, 0)
-            self.lcd.write_string(line)
+            self.lcd.write_string(line[:self.max_line_length])
